@@ -100,9 +100,9 @@ namespace Pomegranate
         /// <param name="typeInheritance"></param>
         /// <param name="namespaceInheritance"></param>
         /// <returns>The IObservable implementation</returns>
-        public PomegranateObservable<T> GetObservable<T>(string path, bool typeInheritance = false, bool namespaceInheritance = false) where T : IPomegranateContract
+        public PomegranateObservable<T> GetObservable<T>(string path, bool typeInheritance = false, bool namespaceInheritance = false, bool autoDispose = false) where T : IPomegranateContract
         {
-            return new PomegranateObservable<T>(this, path, typeInheritance, namespaceInheritance);
+            return new PomegranateObservable<T>(this, path, typeInheritance, namespaceInheritance, autoDispose);
         }
 
         /// <summary>

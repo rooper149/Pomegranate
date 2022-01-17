@@ -59,7 +59,7 @@ namespace Pomegranate
         /// <param name="typeInheritance"></param>
         /// <param name="namespaceInheritance"></param>
         /// <returns>The IObservable implementation</returns>
-        PomegranateObservable<T> GetObservable<T>(string path, bool typeInheritance = false, bool namespaceInheritance = false) where T : IPomegranateContract;
+        PomegranateObservable<T> GetObservable<T>(string path, bool typeInheritance = false, bool namespaceInheritance = false, bool autoDispose = false) where T : IPomegranateContract;
 
         /// <summary>
         /// Unsubscribes a subscription from this node

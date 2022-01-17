@@ -9,11 +9,13 @@ namespace Pomegranate
     public class PomegranateObservable<T> : IObservable<T>, IPomegranateHandle where T : IPomegranateContract
     {
         private bool m_disposed = false;
+        private readonly bool m_autoDispose;
         private readonly IPomegranateHandle? m_disposable;
         private readonly ConcurrentDictionary<IObserver<T>, IDisposable> m_observers = new();
 
-        public PomegranateObservable(INode node, string path, bool typeInheritance = false, bool namespaceInheritance = false)
+        public PomegranateObservable(INode node, string path, bool typeInheritance = false, bool namespaceInheritance = false, bool autoDispose = false)
         {
+            m_autoDispose = autoDispose;
             m_disposable = node.Subscribe<T>(Do, path, typeInheritance, namespaceInheritance);
         }
 
@@ -29,8 +31,10 @@ namespace Pomegranate
 
         private void RemoveObserver(IObserver<T> observer)
         {
-            m_observers.TryRemove(observer, out _);
+            m_observers.TryRemove(observer, out _); 
             observer.OnCompleted();
+
+            if(m_autoDispose && m_observers.Count == 0) { Dispose(); }
         }
 
         public void Dispose()
