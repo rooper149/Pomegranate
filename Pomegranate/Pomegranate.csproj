@@ -17,7 +17,9 @@
 		<Platforms>x64;ARM64</Platforms>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageTags>serialization;framework;flexible;csharp;dotnet;pubsub;easy-to-use;csharp-library;bsd-2-license;small;small-project;pubsub-library;pomegranate</PackageTags>
-		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<Authors>Ryan S. Cooper</Authors>
+		<Version>1.0.1</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
@@ -44,7 +46,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\LICENSE.md">
+		<None Include="..\LICENSE">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
