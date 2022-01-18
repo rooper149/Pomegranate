@@ -79,6 +79,7 @@ namespace Pomegranate.Hashing
         /// and comparisons.
         /// 
         /// https://github.com/Cyan4973/xxHash
+        /// Adapted from: https://github.com/ssg/HashDepot
         /// </summary>
         /// <param name="buffer">the data buffer to hash</param>
         /// <returns>A 64bit hash of the data provided</returns>
