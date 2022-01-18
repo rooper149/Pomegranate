@@ -19,7 +19,7 @@ namespace Pomegranate.Transport
             await Task.Run(() => Controller.ProcessBuffer(buffer));
         }
 
-        public override IPomegranateHandle? Subscribe<T>(Action<Guid, T> callback, string path, bool typeInheritance = false, bool namespaceInheritance = true)
+        public override IPomegranateHandle? Subscribe<T>(Action<Guid, T> callback, string path, bool typeInheritance = false, bool namespaceInheritance = false)
         {
             var id = Guid.NewGuid();
             var hash = HashUtil.GetHashSet(path);

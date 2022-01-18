@@ -154,7 +154,7 @@ namespace Pomegranate.Hashing
                 ProcessLane64(ref acc4, ref pInput);
             }
 
-            ulong acc = RotateLeft(acc1, 1) + RotateLeft(acc2, 7) + RotateLeft(acc3, 12) + RotateLeft(acc4, 18);
+            var acc = RotateLeft(acc1, 1) + RotateLeft(acc2, 7) + RotateLeft(acc3, 12) + RotateLeft(acc4, 18);
 
             MergeAccumulator64(ref acc, acc1);
             MergeAccumulator64(ref acc, acc2);

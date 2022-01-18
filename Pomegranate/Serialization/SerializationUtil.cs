@@ -28,41 +28,27 @@ namespace Pomegranate.Serialization
 
         internal static byte[] Serialize<T>(IPomegranateContract cntrct) where T : ISerializer
         {
-            try
-            {
-                CheckType(cntrct);
-                if (!_signatures.TryGetValue(typeof(T), out var sig)) { RegisterSerializer<T>(); }
-                if (!_signatures.TryGetValue(typeof(T), out sig)) { throw new InvalidSerializerException<T>(); }
+            CheckType(cntrct);
+            if (!_signatures.TryGetValue(typeof(T), out var sig)) { RegisterSerializer<T>(); }
+            if (!_signatures.TryGetValue(typeof(T), out sig)) { throw new InvalidSerializerException<T>(); }
 
-                using var buffer = new MemoryStream();
-                buffer.Write(BitConverter.GetBytes(sig), 0, 8);//write the serializer's signature to the beginning of the buffer
-                if (!_serializers.TryGetValue(sig, out var serializer)) { throw new UnknownSerializerException(sig); }
-                return serializer.Serialize(cntrct, buffer);
-            }
-            catch
-            {
-                throw;
-            }
+            using var buffer = new MemoryStream();
+            buffer.Write(BitConverter.GetBytes(sig), 0, 8);//write the serializer's signature to the beginning of the buffer
+            if (!_serializers.TryGetValue(sig, out var serializer)) { throw new UnknownSerializerException(sig); }
+            return serializer.Serialize(cntrct, buffer);
         }
 
         internal static IPomegranateContract? Deserialize(byte[] data)
         {
-            try
-            {
-                var sig = new byte[8];
-                var dataBuffer = new byte[data.Length - 8];
-                Buffer.BlockCopy(data, 0, sig, 0, 8);//separate the serializer signature from the data
-                Buffer.BlockCopy(data, 8, dataBuffer, 0, dataBuffer.Length);
+            var sig = new byte[8];
+            var dataBuffer = new byte[data.Length - 8];
+            Buffer.BlockCopy(data, 0, sig, 0, 8);//separate the serializer signature from the data
+            Buffer.BlockCopy(data, 8, dataBuffer, 0, dataBuffer.Length);
 
-                var signature = BitConverter.ToUInt64(sig);
+            var signature = BitConverter.ToUInt64(sig);
 
-                if (!_serializers.TryGetValue(signature, out var serializer)) { throw new UnknownSerializerException(signature); }
-                return serializer.Deserialize(dataBuffer);
-            }
-            catch
-            {
-                throw;
-            }
+            if (!_serializers.TryGetValue(signature, out var serializer)) { throw new UnknownSerializerException(signature); }
+            return serializer.Deserialize(dataBuffer);
         }
 
         /// <summary>
@@ -133,23 +119,25 @@ namespace Pomegranate.Serialization
 
         private static IEnumerable<IEnumerable<Type>> _GET_TYPE_PERMUTATIONS(IEnumerable<Type> genericArguments, IEnumerable<Type> candidateTypes)
         {
-            switch (genericArguments.Count())
+            var enumerable = genericArguments.ToList();
+            switch (enumerable.Count)
             {
                 case 0:
                     return new List<List<Type>>();
                 case 1:
                     return candidateTypes
-                            .Where(ctype => genericArguments.First().GetGenericParameterConstraints()
+                            .Where(ctype => enumerable.First().GetGenericParameterConstraints()
                             .Any(constraint => constraint.IsAssignableFrom(ctype)))
-                            .Select(ctype => new List<Type>() { ctype });
+                            .Select(ctype => new List<Type> { ctype });
                 default:
                     {
-                        var ret = _GET_TYPE_PERMUTATIONS(genericArguments.Skip(1).ToList(), candidateTypes)
-                                .SelectMany(sublist => candidateTypes
-                                .Where(ctype => genericArguments.First().GetGenericParameterConstraints()
+                        var types = candidateTypes.ToList();
+                        var ret = _GET_TYPE_PERMUTATIONS(enumerable.Skip(1).ToList(), types)
+                                .SelectMany(sublist => types
+                                .Where(ctype => enumerable.First().GetGenericParameterConstraints()
                                 .Any(constraint => constraint.IsAssignableFrom(ctype)))
                                 .Select(ctype => sublist
-                                .Concat(new List<Type>() { ctype })))
+                                .Concat(new List<Type> { ctype })))
                                 .ToList();
 
                         return ret;

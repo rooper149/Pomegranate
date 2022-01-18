@@ -20,7 +20,6 @@ namespace Pomegranate
 
             m_disposed = true;
             m_disposalAction.Invoke(m_observer);
-            GC.SuppressFinalize(this);
         }
     }
 

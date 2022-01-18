@@ -13,7 +13,7 @@ namespace Pomegranate.Hashing
             path = path.ToLowerInvariant();
 
             //why re-calculate hashes we already have?
-            //let's throw them into a hashtable for lookup
+            //let's throw them into a dictionary for lookup
             if (_hashMap.TryGetValue(path, out var result)) { return result; }
 
             var origin = path.Trim('/');
@@ -26,13 +26,13 @@ namespace Pomegranate.Hashing
                 var ident = originIdentifiers[i];
                 var identLen = ident.Length * 2;//remember these are unicode characters and are 2 bytes!!!
 
-                //c# stores strings a unicode characters, it's a waste to use Encoding.Unicode when we can just grab the pointer
-                //since we are already in an unsafe context anyway
+                //c# stores strings as unicode characters, it's a waste to use Encoding.Unicode when we can just grab the pointer
+                //since we are already in an unsafe context
                 fixed (void* ptr = ident)
                 {
-                    var tmpBuff = new byte[identLen];
-                    System.Runtime.InteropServices.Marshal.Copy(new IntPtr(ptr), tmpBuff, 0, identLen);
-                    arr[i] = XxHash.Compute(tmpBuff);                 
+                    var buffer = new byte[identLen];
+                    System.Runtime.InteropServices.Marshal.Copy(new IntPtr(ptr), buffer, 0, identLen);
+                    arr[i] = XxHash.Compute(buffer);                 
                 }
             }
 
@@ -44,16 +44,16 @@ namespace Pomegranate.Hashing
         public static unsafe ulong GetTypeHash(Type type)
         {
             var typeName = type.FullName?.ToLowerInvariant();
-            Debug.Assert(typeName is not null, $@"{nameof(typeName)} is not null");
+            Debug.Assert(typeName is not null, $@"{nameof(typeName)} is null");
             var length = typeName.Length * 2;//remember these are unicode characters and are 2 bytes!!!
 
             //c# stores strings a unicode characters, it's a waste to use Encoding.Unicode when we can just grab the pointer
             //since the project is in an unsafe context anyway
             fixed (void* ptr = typeName)
             {
-                var tmpBuff = new byte[length];
-                System.Runtime.InteropServices.Marshal.Copy(new IntPtr(ptr), tmpBuff, 0, length);
-                return XxHash.Compute(tmpBuff);
+                var buffer = new byte[length];
+                System.Runtime.InteropServices.Marshal.Copy(new IntPtr(ptr), buffer, 0, length);
+                return XxHash.Compute(buffer);
             }
         }
     }

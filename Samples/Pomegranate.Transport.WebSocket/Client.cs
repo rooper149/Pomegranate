@@ -20,13 +20,8 @@ namespace Pomegranate.Transport.WebSocket
         public void Open()
         {
             m_socket = new ClientWebSocket();
-
-            try
-            {
-                m_socket.ConnectAsync(new Uri($@"ws://{m_endpoint}:{m_port}/{Constants.NAMESPACE_PREFIX}"), CancellationToken.None).Wait();
-                BeginReceive();
-            }
-            catch { throw; }
+            m_socket.ConnectAsync(new Uri($@"ws://{m_endpoint}:{m_port}/{Constants.NAMESPACE_PREFIX}"), CancellationToken.None).Wait();
+            BeginReceive();
         }
 
         public async void Close()

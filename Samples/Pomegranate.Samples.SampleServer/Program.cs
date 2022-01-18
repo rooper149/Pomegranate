@@ -2,9 +2,11 @@
 using Pomegranate.Transport;
 using Pomegranate.Transport.WebSocket;
 
+namespace Pomegranate.Samples.SampleServer;
+
 public class Program
 {
-    static readonly TransportNode _node = new();
+    private static readonly TransportNode _node = new();
 
     public static void Main(string[] args)
     {

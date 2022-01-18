@@ -18,7 +18,7 @@ namespace Pomegranate.Transport
 
         private static Guid ProcessContract(IPomegranateContract contract, IClientProxy? clientProxy)
         {
-            if(contract is not PrimaryContract primaryContract) { throw new InvalidOperationException($@"All inbound contracts must be PrimaryContracts"); }
+            if(contract is not PrimaryContract primaryContract) { throw new InvalidOperationException(@"All inbound contracts must be PrimaryContracts"); }
 
             //check for primary contracts
             switch (primaryContract)
@@ -51,12 +51,12 @@ namespace Pomegranate.Transport
         /// <summary>
         /// Publishes a contract to all listening nodes
         /// </summary>
-        /// <param name="cntrl">The contract to publish wrapped in a transport controller</param>
-        private static void Publish(TransportContract tcntrct)
+        /// <param name="contract">The contract to publish wrapped in a transport controller</param>
+        private static void Publish(TransportContract contract)
         {
             foreach(var node in _nodes)
             {
-                node.Value.Post(tcntrct);
+                node.Value.Post(contract);
             }
         }
 
@@ -89,9 +89,10 @@ namespace Pomegranate.Transport
         /// </summary>
         /// <param name="info">The unsubscribe contract</param>
         /// <returns>Returns true if the operation completed successfully.</returns>
-        private static bool Unsubscribe(UnsubscribeContract info)
+        private static void Unsubscribe(UnsubscribeContract info)
         {
-            return _nodes.TryGetValue(info.SenderId, out var node) && node.Unsubscribe(info);
+            _nodes.TryGetValue(info.SenderId, out var node);
+            node?.Unsubscribe(info);
         }
 
         /// <summary>
@@ -99,9 +100,9 @@ namespace Pomegranate.Transport
         /// </summary>
         /// <param name="info"></param>
         /// <returns>Returns true is the operation was successful.</returns>
-        private static bool CloseNode(CloseNodeContract info)
+        private static void CloseNode(CloseNodeContract info)
         {
-            return _nodes.TryRemove(info.SenderId, out _);
+            _nodes.TryRemove(info.SenderId, out _);
         }
     }
 }

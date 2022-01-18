@@ -30,15 +30,15 @@ namespace Pomegranate.Transport.WebSocket
             webBuilder.UseStartup<Transport>();
         });
 
-        public void Run() { m_host?.RunAsync(); }
-        public void Shutdown() { m_host?.StopAsync(); }
+        public void Run() { m_host.RunAsync(); }
+        public void Shutdown() { m_host.StopAsync(); }
 
         public void Dispose()
         {
             if (m_disposed) { return; }
 
             m_disposed = true;
-            m_host?.Dispose();
+            m_host.Dispose();
             GC.SuppressFinalize(this);
         }
     }

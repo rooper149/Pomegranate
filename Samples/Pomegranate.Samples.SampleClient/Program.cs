@@ -1,10 +1,9 @@
-﻿using Pomegranate;
-using Pomegranate.Samples.Shared;
-using Pomegranate.Transport.WebSocket;
+﻿using Pomegranate.Samples.Shared;
+namespace Pomegranate.Samples.SampleClient;
 
 public class Program
 {
-    private static readonly Client _client = new(System.Net.IPAddress.Loopback, 5000);
+    private static readonly Transport.WebSocket.Client _client = new(System.Net.IPAddress.Loopback, 5000);
 
     public static void Main(string[] args)
     {
@@ -27,24 +26,5 @@ public class Program
     private static void ReceiveMessage(Guid sender, MessageContract contract)
     {
         Console.WriteLine($@"FROM SERVER: {contract.Message}");
-    }
-}
-
-public class ExampleNode
-{
-    private readonly INode m_node;
-
-    public ExampleNode(INode node)
-    {
-        m_node = node;
-
-        IObservable<MessageContract> observable = m_node.GetObservable<MessageContract>(@"/msg", typeInheritance: false, namespaceInheritance: false);
-
-        m_node.Subscribe<MessageContract>(ReceiveMessage, @"/msg", typeInheritance: false, namespaceInheritance: false);
-    }
-
-    private void ReceiveMessage(Guid sender, MessageContract contract)
-    {
-        Console.WriteLine(contract.Message);
     }
 }

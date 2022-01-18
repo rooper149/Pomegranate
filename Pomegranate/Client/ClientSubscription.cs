@@ -36,7 +36,7 @@ namespace Pomegranate.Client
         {
             if (!Validate(contract)) { return; }
 
-            if (contract.Contract is T tmp) { m_callback.Invoke(contract.SenderId, tmp);}
+            if (contract.Contract is T tmp) { m_callback(contract.SenderId, tmp); }
             else { Debug.Assert(false); }
         }
     }

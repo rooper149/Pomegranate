@@ -19,8 +19,7 @@ namespace Pomegranate
             if (m_disposed) { return; }
 
             m_disposed = true;
-            m_node?.Unsubscribe(m_subscriptionId);
-            GC.SuppressFinalize(this);
+            m_node.Unsubscribe(m_subscriptionId);
         }
     }
 }

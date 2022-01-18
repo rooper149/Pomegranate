@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Pomegranate
 {
     [StructLayout(LayoutKind.Auto)]
-    public struct PomegranateNamespace
+    public readonly struct PomegranateNamespace
     {
         public int Length { get; init; }
         public ulong[] HashSet { get; init; }
@@ -32,8 +32,7 @@ namespace Pomegranate
 
         public override bool Equals(object? obj)
         {
-            if (obj is not PomegranateNamespace hash) return false;
-            return HashSet.SequenceEqual(hash.HashSet);
+            return obj is PomegranateNamespace hash && HashSet.SequenceEqual(hash.HashSet);
         }
 
         /// <summary>
