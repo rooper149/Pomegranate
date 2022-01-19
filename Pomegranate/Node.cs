@@ -128,12 +128,10 @@ namespace Pomegranate
         public void Receive(byte[] buffer)
         {
             var contract = IPomegranateContract.Deserialize(buffer);
-            if (contract is TransportContract transportContract) 
+            if (contract is not TransportContract transportContract) return;
+            foreach (var subscription in Subscriptions)
             {
-                foreach (var subscription in Subscriptions)
-                {
-                    if (subscription.Value is IPostableSubscription sub) { sub.Post(transportContract); }
-                }
+                if (subscription.Value is IPostableSubscription sub) { sub.Post(transportContract); }
             }
         }
     }
