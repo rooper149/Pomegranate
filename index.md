@@ -1,5 +1,5 @@
 ## Welcome to Pomegranate
-Pomegranate is an extreemly flexible Pub/Sub framework designed for any type of transport, or even no transport at all. You can use Pomegranate locally, or write a transport that uses Unix/Windows sockets for IPC, or use WebSockets for going across the WAN. The method of transport it entirely up to you.
+Pomegranate is an extreemly flexible Pub/Sub framework designed for any type of transport, or even no transport at all. You can use Pomegranate locally, write a transport that uses Unix/Windows sockets for IPC, or use WebSockets for going across the WAN. The method of transport it entirely up to you. 
 
 Pomegranate also allows you to bring your own serialization. By default Pomegranate provides a serializer that uses `DataContractSerializer` and doesn't require any kind of attributes for serialization, you can simply send any object that implements `IPomegranateContract` over Pomegranate, so long as the receiving end shares the same object definition (likely in some kind of shared libary).
 
